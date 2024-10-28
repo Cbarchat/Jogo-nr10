@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo NR 10 - Segurança do Trabalho</title>
+    <style>
+        /* Estilos do tabuleiro e layout */
+        body { font-family: Arial, sans-serif; display: flex; flex-direction: column; align-items: center; }
+        #tabuleiro { display: grid; grid-template-columns: repeat(8, 80px); gap: 5px; margin: 20px 0; }
+        .casa { width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; border: 1px solid #333; }
+        .pegadinha { background-color: #f8d7da; }
+        .pergunta { background-color: #d4edda; }
+        .seguro { background-color: #fff3cd; }
+        #dados, #pergunta-area { margin: 20px; }
+        #mensagem { font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>Jogo NR 10 - Segurança do Trabalho</h1>
+    <div id="tabuleiro">
+        <!-- Inserir 40 casas aqui -->
+        <!-- Exemplo de casas -->
+        <div class="casa seguro">1</div>
+        <div class="casa pegadinha">2</div>
+        <div class="casa pergunta">3</div>
+        <!-- Continue até completar as 40 casas -->
+    </div>
+    <button id="dados">Rolar o Dado</button>
+    <div id="mensagem"></div>
+    <div id="pergunta-area" style="display: none;">
+        <p id="pergunta-texto"></p>
+        <button onclick="responderPergunta(true)">Verdadeiro</button>
+        <button onclick="responderPergunta(false)">Falso</button>
+    </div>
+    
+    <script>
+        // Lógica do jogo e dados
+        let posicaoJogador = 0;
+
+        document.getElementById("dados").addEventListener("click", function() {
+            let resultadoDado = Math.floor(Math.random() * 6) + 1;
+            document.getElementById("mensagem").innerText = "Você tirou " + resultadoDado;
+            avancarJogador(resultadoDado);
+        });
+
+        function avancarJogador(passos) {
+            posicaoJogador += passos;
+            if (posicaoJogador >= 40) {
+                document.getElementById("mensagem").innerText = "Parabéns! Você venceu!";
+            } else {
+                let casaAtual = document.querySelectorAll("#tabuleiro .casa")[posicaoJogador];
+                if (casaAtual.classList.contains("pegadinha")) {
+                    document.getElementById("mensagem").innerText = "Pegadinha! Volte 2 casas.";
+                    posicaoJogador -= 2;
+                } else if (casaAtual.classList.contains("pergunta")) {
+                    fazerPergunta();
+                }
+            }
+        }
+
+        function fazerPergunta() {
+            document.getElementById("pergunta-area").style.display = "block";
+            document.getElementById("pergunta-texto").innerText = "A NR 10 exige que todas as instalações tenham aterramento?";
+            // Esta é apenas uma pergunta de exemplo, você pode criar uma lista de perguntas
+        }
+
+        function responderPergunta(correta) {
+            document.getElementById("pergunta-area").style.display = "none";
+            if (correta) {
+                document.getElementById("mensagem").innerText = "Resposta correta! Avance 2 casas.";
+                posicaoJogador += 2;
+            } else {
+                document.getElementById("mensagem").innerText = "Resposta incorreta! Perde uma rodada.";
+            }
+        }
+    </script>
+</body>
+</html>
